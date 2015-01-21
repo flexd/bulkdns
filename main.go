@@ -83,9 +83,6 @@ func main() {
 		// Wait for rate limit
 		rl.Wait()
 		wg.Add(1)
-		qcMutex.Lock()
-		queryCount += 1
-		qcMutex.Unlock()
 		go lookupDomain(scanner.Text())
 	}
 	if err := scanner.Err(); err != nil {
@@ -112,4 +109,7 @@ func lookupDomain(domain string) {
 	}
 	log.Println(domain, ips)
 	wg.Done()
+	qcMutex.Lock()
+	queryCount += 1
+	qcMutex.Unlock()
 }
